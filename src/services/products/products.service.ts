@@ -1,6 +1,7 @@
 
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from 'src/controllers/products/interfaces/product.interface';
+import { ProductPatchDto } from 'src/products/dto/product-patch.dto/product-patch.dto';
 import { TagsController } from 'src/tags/tags.controller';
 import { TagsService } from 'src/tags/tags.service';
 
@@ -72,7 +73,15 @@ export class ProductsService {  //define an @Infectable class to import in produ
             return item.id == id? product : item;
         });
     }
-    
+    patch(id: number, body: ProductPatchDto) {
+        const productIndex = this.products.findIndex(item => item.id === id);
+        if (productIndex === -1) {
+            throw new NotFoundException(`No encontramos el producto ${id}`);
+        }
+
+        // Actualiza solo las propiedades que están presentes en body
+        this.products[productIndex] = { ...this.products[productIndex], ...body };
+    }
     /**
      * Deletes a product.
      * @param id The ID of the product to delete.

@@ -1,24 +1,19 @@
-import { IsInt, IsString } from "class-validator";
+import { IsInt, IsString, IsArray } from "class-validator";
 
 export class ProductDto {
     @IsInt()
-      id: number;  
+    id: number;
 
     @IsString()
     name: string;
-    
+
     @IsInt()
-      price: number;  
+    price: number;
 
     @IsString()
     description: string;
 
-    @IsString()
-      tags: string[];     
-
-
-
-
-
-
+    @IsArray()
+    @IsString({ each: true })
+    tags: string[];  
 }

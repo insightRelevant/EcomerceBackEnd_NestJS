@@ -9,17 +9,27 @@ import {
   Post,
   Delete,
   ParseIntPipe,
+  Patch,
 } from "@nestjs/common"; // Importa las utilidades necesarias de NestJS
 
 import { ProductsService } from "src/services/products/products.service"; // Importa el servicio de productos
 import { Product } from "./interfaces/product.interface"; // Importa la interfaz del producto
 import { ProductDto } from "src/products/dto/product.dto/product.dto"; // Importa el DTO para productos
+import { ProductPatchDto } from "src/products/dto/product-patch.dto/product-patch.dto";
 
 // Controlador para la ruta '/products'
 @Controller('products')
 export class ProductsController {
   // Constructor que recibe una instancia de ProductsService
   constructor(private readonly productsService: ProductsService) {}
+
+  @Patch(':id')
+  async patch(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: ProductPatchDto,
+  ) {
+    return this.productsService.patch(id, body);
+  }
 
   // Método para manejar solicitudes GET en '/products'
   // Retorna todos los productos como un array de objetos de tipo Product
@@ -72,4 +82,5 @@ export class ProductsController {
   delete(@Param('id') id: number) {
     this.productsService.delete(id); // Llama al método 'delete' del servicio para eliminar el producto con el ID proporcionado
   }
+  
 }
