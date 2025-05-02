@@ -1,6 +1,7 @@
-import { IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 export class TagDto {
-  @IsString()
-  tag: string;
+  @IsArray()
+  @IsString({ each: true }) // El campo `tag` es un array de strings
+  tags: string[];
 }

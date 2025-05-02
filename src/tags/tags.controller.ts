@@ -1,6 +1,6 @@
 import { Controller, Patch, Param, Body, ParseIntPipe } from '@nestjs/common';
-import { TagsService } from './tags.service';
-import { TagPatchDto } from './dto/tag-patch.dto';
+import { TagsService } from '../tags/tags.service';
+import { TagPatchDto } from '../tags/dto/tag-patch.dto';
 
 @Controller('tags')
 export class TagsController {

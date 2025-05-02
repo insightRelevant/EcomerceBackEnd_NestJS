@@ -1,14 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TagPatchDto } from './dto/tag-patch.dto';
+import { TagPatchDto } from './dto/tag-patch.dto'; // Asegúrate de que el DTO esté importado correctamente.
 
 @Injectable()
 export class TagsService {
-  getAllTags() {
-      throw new Error('Method not implemented.');
-  }
   private tags: { id: number; tag: string }[] = [
-    { id: 1, tag: 'Etiqueta 1' },
+    { id: 1, tag: 'Disponible' },
+    { id: 2, tag: 'Agotado' },
+    // Agrega más etiquetas si es necesario
   ];
+
+  // Método para obtener todas las tags
+  getAllTags() {
+    return this.tags;
+  }
 
   // Método para actualizar un tag específico
   patchTag(id: number, tagPatchDto: TagPatchDto) {
