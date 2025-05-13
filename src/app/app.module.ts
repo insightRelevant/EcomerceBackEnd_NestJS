@@ -12,6 +12,7 @@ import { Product } from '../products/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { Clients } from '../user/entities/clients.entity';
 import { Review } from '../reviews/entities/review.entity';
+import { ReviewsService } from '../reviews/reviews.service';
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ import { Review } from '../reviews/entities/review.entity';
     }),
   ],
   controllers: [AppController, ProductsController, TagsController],
-  providers: [AppService, ProductsService, TagsService],
+  providers: [AppService, ProductsService, TagsService, ReviewsService],
 })
 export class AppModule {}
