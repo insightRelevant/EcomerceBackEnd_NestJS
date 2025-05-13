@@ -16,20 +16,14 @@ import { ProductsService } from '../products/products.service'; // Importa el se
 import { Product } from './interfaces/product.interface'; // Importa la interfaz del producto
 import { ProductDto } from './dto/product.dto/product.dto'; // Importa el DTO para productos
 import { ProductPatchDto } from './dto/product-patch.dto/product-patch.dto'; // Importa el DTO para actualizar productos parcialmente
+import { CreateReviewDto } from 'src/reviews/dto/create-review.dto';
 
 // Controlador para la ruta '/products'
 @Controller('products')
 export class ProductsController {
+  reviewService: any;
   // Constructor que recibe una instancia de ProductsService
   constructor(private readonly productsService: ProductsService) {}
-
-  @Patch(':id')
-  async patch(
-    @Param('id', ParseIntPipe) id: number, // Convierte 'id' a un número y lanza un error si no es válido
-    @Body() body: ProductPatchDto, // Recibe el cuerpo de la solicitud para actualizar parcialmente un producto
-  ) {
-    return this.productsService.patch(id, body); // Llama al servicio para realizar la actualización parcial
-  }
 
   // Método para manejar solicitudes GET en '/products'
   // Retorna todos los productos como un array de objetos de tipo Product
@@ -63,6 +57,14 @@ export class ProductsController {
     };
   }
 
+  @Post(':id/review')
+  async createReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: CreateReviewDto,
+  ) {
+    return await this.reviewService.saveReview(id, body);
+  }
+
   @Put(':id')
   async update(
     @Param(
@@ -73,6 +75,14 @@ export class ProductsController {
     @Body() body, // Recibe el cuerpo de la solicitud
   ) {
     return this.productsService.update(id, body); // Llama al servicio para actualizar el producto con el ID proporcionado
+  }
+
+  @Patch(':id')
+  async patch(
+    @Param('id', ParseIntPipe) id: number, // Convierte 'id' a un número y lanza un error si no es válido
+    @Body() body: ProductPatchDto, // Recibe el cuerpo de la solicitud para actualizar parcialmente un producto
+  ) {
+    return this.productsService.patch(id, body); // Llama al servicio para realizar la actualización parcial
   }
 
   @Delete(':id')

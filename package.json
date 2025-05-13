@@ -4,7 +4,7 @@
   "description": "",
   "author": "David Soria Fresneda",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "fuck U apple",
   "scripts": {
     "seed": "ts-node src/seed.ts",
     "build": "nest build",

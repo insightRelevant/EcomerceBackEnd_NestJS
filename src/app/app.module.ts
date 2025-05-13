@@ -11,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from '../products/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { Clients } from '../user/entities/clients.entity';
-import { Review } from '../products/entities/review.entity';
+import { Review } from '../reviews/entities/review.entity';
 
 @Module({
   imports: [
