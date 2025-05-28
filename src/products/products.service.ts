@@ -91,7 +91,7 @@ export class ProductsService {
       throw new NotFoundException(`No encontramos el producto ${id}`);
     }
   }
-
+  //Actualiza parcialmente un producto
   async patch(id: number, body: ProductPatchDto) {
     const productToUpdate = {
       id,

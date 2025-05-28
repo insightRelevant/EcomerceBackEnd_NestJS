@@ -58,10 +58,7 @@ export class ProductsController {
   }
 
   @Post(':id/review')
-  async createReview(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() body: CreateReviewDto,
-  ) {
+  async createReview(@Param('id', ParseIntPipe) id: number, @Body() body: CreateReviewDto) {
     return await this.reviewService.saveReview(id, body);
   }
 

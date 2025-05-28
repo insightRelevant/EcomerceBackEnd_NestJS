@@ -4,6 +4,8 @@ import { faker } from '@faker-js/faker';
 import { User } from './user/entities/user.entity';
 import { Clients } from './user/entities/clients.entity';
 import { Product } from './products/entities/product.entity';
+import { Review } from './reviews/entities/review.entity';
+import { Models } from './products/entities/models.entity';
 
 const AppDataSource = new DataSource({
   type: 'mysql',
@@ -12,42 +14,122 @@ const AppDataSource = new DataSource({
   username: 'geekoServerDB',
   password: 'Mj4$!2@#',
   database: 'nestDB',
-  entities: [User, Clients, Product], // Ensure Clients entity has correct properties
-  synchronize: false, // ⚠️ true solo si querés que cree las tablas (¡cuidado en producción!)
+  entities: [User, Clients, Product, Review, Models],
+  synchronize: true, // ⚠️ true solo si querés que cree las tablas (¡cuidado en producción!)
 });
 
 async function seed() {
-  await AppDataSource.initialize();
+  try {
+    await AppDataSource.initialize();
+    console.log('✅ Conexión a la base de datos establecida');
+  } catch (err) {
+    console.error('❌ Error al conectar con la base de datos:', err);
+    return;
+  }
+
   const userRepo = AppDataSource.getRepository(User);
+  const clientRepo = AppDataSource.getRepository(Clients);
   const productRepo = AppDataSource.getRepository(Product);
+  const reviewRepo = AppDataSource.getRepository(Review);
+  const modelsRepo = AppDataSource.getRepository(Models);
 
   // Seed users
-  for (let i = 0; i < 20000; i++) {
-    const fakeUser = userRepo.create({
-      name: faker.person.firstName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    });
-
-    await userRepo.save(fakeUser);
+  try {
+    for (let i = 0; i < 300; i++) {
+      const fakeUser = userRepo.create({
+        name: faker.person.firstName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.recent(),
+      });
+      await userRepo.save(fakeUser);
+    }
+    console.log('✅ Usuarios sembrados correctamente');
+  } catch (err) {
+    console.error('❌ Error al sembrar usuarios:', err);
   }
 
-  console.log('✅ Usuarios sembrados correctamente');
-
-  // Simulate patches on products
-  const products = await productRepo.find();
-  for (const product of products) {
-    product.name = faker.commerce.productName();
-    product.price = parseFloat(faker.commerce.price());
-    product.description = faker.commerce.productDescription();
-
-    await productRepo.save(product);
+  // Seed clients
+  try {
+    for (let i = 0; i < 500; i++) {
+      const fakeClient = clientRepo.create({
+        id: faker.string.uuid(),
+        name: faker.company.name(),
+        contactEmail: faker.internet.email(),
+        password: faker.internet.password(),
+        createdAt: faker.date.past(),
+        updatedAt: faker.date.recent(),
+      });
+      await clientRepo.save(fakeClient);
+    }
+    console.log('✅ Clientes sembrados correctamente');
+  } catch (err) {
+    console.error('❌ Error al sembrar clientes:', err);
   }
 
-  console.log('✅ Productos actualizados correctamente');
-  await AppDataSource.destroy();
+  // Seed models
+  const models = [];
+  try {
+    for (let i = 0; i < 10; i++) {
+      const fakeModel = modelsRepo.create({
+        model: faker.commerce.productAdjective(),
+      });
+      models.push(await modelsRepo.save(fakeModel));
+    }
+    console.log('✅ Modelos sembrados correctamente');
+  } catch (err) {
+    console.error('❌ Error al sembrar modelos:', err);
+  }
+
+  // Seed products
+  const products = [];
+  try {
+    for (let i = 0; i < 30; i++) {
+      const fakeProduct = productRepo.create({
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: parseFloat(faker.commerce.price()),
+        stock: faker.number.int({ min: 1, max: 100 }),
+        tags: [faker.commerce.department(), faker.commerce.department()],
+        models: [models[faker.number.int({ min: 0, max: models.length - 1 })]],
+      });
+      const savedProduct = await productRepo.save(fakeProduct);
+      products.push(savedProduct); // Asegúrate de agregar el producto guardado al array
+    }
+    console.log('✅ Productos sembrados correctamente');
+  } catch (err) {
+    console.error('❌ Error al sembrar productos:', err);
+  }
+
+  // Seed reviews
+  try {
+    if (products.length === 0) {
+      throw new Error('No hay productos disponibles para asociar reseñas.');
+    }
+
+    for (let i = 0; i < 100; i++) {
+      const fakeReview = reviewRepo.create({
+        userName: faker.person.firstName(),
+        rating: faker.number.int({ min: 1, max: 5 }),
+        comment: faker.lorem.sentence(),
+        product: products[faker.number.int({ min: 0, max: products.length - 1 })],
+      });
+      await reviewRepo.save(fakeReview);
+    }
+    console.log('✅ Reseñas sembradas correctamente');
+  } catch (err) {
+    console.error('❌ Error al sembrar reseñas:', err);
+  }
+
+  try {
+    await AppDataSource.destroy();
+    console.log('✅ Conexión a la base de datos cerrada');
+  } catch (err) {
+    console.error('❌ Error al cerrar la conexión a la base de datos:', err);
+  }
 }
 
 seed().catch((err) => {
-  console.error('❌ Error sembrando la base de datos:', err);
+  console.error('❌ Error inesperado durante el proceso de seed:', err);
 });

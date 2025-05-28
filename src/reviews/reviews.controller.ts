@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Controller,
   Get,
@@ -6,37 +7,43 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { Review } from './entities/review.entity';
 
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
-  @Post()
-  create(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.create(createReviewDto);
+  @Post(':id/review')
+  async createReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: CreateReviewDto,
+  ) {
+    return this.reviewsService.saveReview(id, body);
   }
 
-  @Get()
-  findAll() {
-    return this.reviewsService.findAll();
+  @Get(':id/review')
+  async getReviews(@Param('id', ParseIntPipe) id: number): Promise<Review[]> {
+    return this.reviewsService.getReviews(id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewsService.findOne(+id);
+  @Patch(':id/review/:reviewId')
+  async updateReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: CreateReviewDto,
+  ) {
+    return this.reviewsService.updateReview(id, body);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewsService.update(+id, updateReviewDto);
+  @Delete(':id/review/:reviewId')
+  async deleteReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('reviewId', ParseIntPipe) reviewId: number,
+  ) {
+    return this.reviewsService.deleteReview(id, reviewId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reviewsService.remove(+id);
-  }
 }

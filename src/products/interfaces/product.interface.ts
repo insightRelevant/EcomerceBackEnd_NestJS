@@ -5,5 +5,5 @@ export interface Product {
   description: string;
   price: number;
   stock: number;
-  tags: string[]; // Lista de etiquetas asociadas al producto
+  tags: string[];
 }

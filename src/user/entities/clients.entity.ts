@@ -9,7 +9,7 @@ export class Clients {
   name: string;
 
   @Column()
-  email: string;
+  contactEmail: string;
 
   @Column()
   password: string;
