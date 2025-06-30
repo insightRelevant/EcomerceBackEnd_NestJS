@@ -16,7 +16,7 @@ import { ProductsService } from '../products/products.service'; // Importa el se
 import { Product } from './interfaces/product.interface'; // Importa la interfaz del producto
 import { ProductDto } from './dto/product.dto/product.dto'; // Importa el DTO para productos
 import { ProductPatchDto } from './dto/product-patch.dto/product-patch.dto'; // Importa el DTO para actualizar productos parcialmente
-import { CreateReviewDto } from 'src/reviews/dto/create-review.dto';
+import { CreateReviewDto } from '../reviews/dto/create-review.dto';
 
 // Controlador para la ruta '/products'
 @Controller('products')

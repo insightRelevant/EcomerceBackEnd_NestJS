@@ -4,7 +4,7 @@ import { ReviewsController } from './reviews.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from 'src/products/entities/product.entity';
 import { Review } from './entities/review.entity';
-import { Models } from 'src/products/entities/models.entity';
+import { Models } from '../products/entities/models.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Review, Product, Models])],
