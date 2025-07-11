@@ -116,12 +116,15 @@ export class ProductsService {
   
 
   // Filtra productos por etiqueta
-  getProductByTag(tag: string): Product[] {
+  async getProductByTag(tag: string): Promise<Product[]> {
     // Convierte el tag recibido a minúsculas
     const lowerCaseTag = tag.toLowerCase();
+    const products = await this.productsRepository.find();
 
     // Filtra los productos donde el tag coincida con el tag buscado (sin importar mayúsculas/minúsculas)
-    const productsWithTag = this.products.filter((product) =>
+    const productsWithTag = products.filter(
+      (product) => 
+        Array.isArray(product.tags) && 
       product.tags.some(
         (productTag) => productTag.toLowerCase() === lowerCaseTag,
       ),

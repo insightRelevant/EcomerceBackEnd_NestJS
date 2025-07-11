@@ -41,9 +41,9 @@ export class ProductsController {
   // Maneja solicitudes GET en '/products/tag/:tag', donde ':tag' es un parámetro de ruta
   // Filtra productos por el valor de 'tag'
   @Get('tag/:tag')
-  getProductByTag(@Param('tag') tag: string) {
+  async getProductByTag(@Param('tag') tag: string) {
     // Pasamos el tag recibido al servicio para obtener los productos sin importar mayúsculas/minúsculas
-    return this.productsService.getProductByTag(tag.toLowerCase()); // Convertimos el tag a minúsculas
+    return await this.productsService.getProductByTag(tag.toLowerCase()); // Convertimos el tag a minúsculas
   }
 
   @Post()
