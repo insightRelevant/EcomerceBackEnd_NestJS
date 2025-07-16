@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Review } from '../../reviews/entities/review.entity';
 import { Models } from './models.entity';
 
@@ -22,7 +22,7 @@ export class Product {
   @Column('simple-json') //le decimos que se trata de un json
   tags: string[];
 
-  @ManyToOne(() => Review, (review) => review.productId)
+  @OneToMany(() => Review, (review) => review.productId)
   reviews: Review[];
 
   @JoinTable()
