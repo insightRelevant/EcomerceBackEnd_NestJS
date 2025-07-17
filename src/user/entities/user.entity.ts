@@ -1,14 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-
-@Entity()
+import { PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Product } from '../../products/entities/product.entity';
 export class User {
-  @PrimaryGeneratedColumn() // Esto genera automáticamente el ID
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -20,10 +13,6 @@ export class User {
   @Column()
   password: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ManyToMany(() => Product, (product) => product.user)
+  products: Product[];
 }
-// This code defines a User entity for a NestJS application using TypeORM.

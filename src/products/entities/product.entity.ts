@@ -1,6 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinTable,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Review } from '../../reviews/entities/review.entity';
 import { Models } from './models.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity('products')
 export class Product {
@@ -25,7 +34,14 @@ export class Product {
   @OneToMany(() => Review, (review) => review.productId)
   reviews: Review[];
 
+  @ManyToOne(() => User, (user) => user.products)
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  @Column()
+  userId: number;
+
   @JoinTable()
-  @ManyToMany(() => Models, (models) => models.products)
+  @OneToMany(() => Models, (models) => models.products)
   models: Models[];
 }

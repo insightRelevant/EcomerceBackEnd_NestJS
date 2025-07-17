@@ -16,4 +16,7 @@ export class ProductDto {
   @IsArray()
   @IsString({ each: true })
   tags: string[];
+
+  @IsInt()
+  userId: number;
 }
