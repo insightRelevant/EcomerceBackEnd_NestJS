@@ -1,38 +1,25 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+
+export type User = any;
 
 @Injectable()
 export class UserService {
-  private users = [];
+  private users = [
+    {
+      userId: 1,
+      username: 'jonh',
+      password: 'secret',      
+    },
 
-  create(createUserDto: CreateUserDto) {
-    const newUser = { id: Date.now(), ...createUserDto };
-    this.users.push(newUser);
-    return newUser;
-  }
+    {
+      userId: 2,
+      username: 'maria',
+      password: 'secret2',
+    },
+  ];
+  async findOne(username: string): Promise<User | undefined> {
+    return this.users.find(user => user.username === username);
 
-  findAll() {
-    return this.users;
-  }
-
-  findOne(id: number) {
-    return this.users.find((user) => user.id === id);
-  }
-
-  update(id: number, updateUserDto: CreateUserDto) {
-    const userIndex = this.users.findIndex((user) => user.id === id);
-    if (userIndex > -1) {
-      this.users[userIndex] = { ...this.users[userIndex], ...updateUserDto };
-      return this.users[userIndex];
-    }
-    return null;
-  }
-
-  remove(id: number) {
-    const userIndex = this.users.findIndex((user) => user.id === id);
-    if (userIndex > -1) {
-      return this.users.splice(userIndex, 1);
-    }
-    return null;
   }
 }

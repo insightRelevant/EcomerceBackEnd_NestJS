@@ -54,13 +54,15 @@ async function seed() {
   try {
     for (let i = 0; i < 500; i++) {
       const fakeClient = clientRepo.create({
-        id: faker.string.uuid(),
         name: faker.company.name(),
-        contactEmail: faker.internet.email(),
-        password: faker.internet.password(),
+        email: faker.internet.email(), // coincide con la entidad
+        phone: faker.phone.number(), // coincide con la entidad
+        // no pases id
+        // tampoco password, no existe en la entidad
         createdAt: faker.date.past(),
         updatedAt: faker.date.recent(),
       });
+
       await clientRepo.save(fakeClient);
     }
     console.log('✅ Clientes sembrados correctamente');
