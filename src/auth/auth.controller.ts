@@ -1,34 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+/* eslint-disable prettier/prettier */
+//Importar: Body, controller, Post, Httpcode, httpstatus desde nestjscommon;
+//Importar: AuthService (common )
+//Crear un decorador controller auth, exportar la clase 
+//con metodo constructor (privado de tipo AuthService)
+//crear un httpstatus.OKcon decorador HttpCode, un Post con parametro login
+// y crear un metodo singIn y pasarle por parametro el decorator Body metodo 
+//de tipo singInDto tipo record que sera un string, any
+// retornar este service de auth accediendo al metodo singIn
+//con parametro de singInDto que acceda al username, y al singInDto password
+
+import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { AuthService  } from './auth.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private authservice: AuthService,
+    private jwtService: JwtService
+ ) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  singIn(@Body() signInDto: Record<string, any> ) {
+    return this.authservice.signIn(signInDto.username, signInDto.password);
   }
-
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+  
 }
+
+
